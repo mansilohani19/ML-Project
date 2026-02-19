@@ -6,6 +6,12 @@ import pandas as pd
 
 import dill
 from sklearn.metrics import r2_score
+from catboost import CatBoostRegressor
+from sklearn.ensemble import AdaBoostRegressor,GradientBoostingRegressor,RandomForestRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.tree import DecisionTreeRegressor
+from xgboost import XGBRegressor
 
 
 from src.exception import CustomException
@@ -38,9 +44,19 @@ def evaluate_models(X_train,y_train,X_test,y_test,models):
             test_model_score = r2_score(y_test,y_test_pred)
 
             train_model_score = r2_score(y_train,y_train_pred)
-            
+
             report[list(models.keys())[i]] = test_model_score
 
             return report 
+    except Exception as e:
+        raise CustomException(e,sys)
+    
+
+def load_object(file_path):
+    try:
+        with open(file_path,"rb") as file_obj:
+            return dill.load(file_obj)
+        
+
     except Exception as e:
         raise CustomException(e,sys)
